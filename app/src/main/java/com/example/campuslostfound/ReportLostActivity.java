@@ -18,8 +18,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,56 +32,24 @@ public class ReportLostActivity extends AppCompatActivity {
 
     EditText etItemName, etLocation, etDate, etDescription, etContact;
     Spinner spinnerCategory;
-    Button btnSubmitLost, btnAddImage;
-    ImageButton btnCancelImage;
     ImageView imgPreview;
-    FrameLayout imageContainer;
+    Button btnAddPhoto, btnCancelPhoto, btnSubmitLost;
     Uri selectedImageUri = null;
     Uri cameraImageUri = null;
 
-    String[] categories = {"Electronics", "Stationery", "Clothing",
-            "Accessories", "Books", "ID Card", "Other"};
-
-    // Gallery picker
-    ActivityResultLauncher<String> galleryLauncher =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-                if (uri != null) {
-                    selectedImageUri = uri;
-                    imgPreview.setImageURI(uri);
-                    imageContainer.setVisibility(View.VISIBLE);
-                    Toast.makeText(this, "Image selected!", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-    // Camera launcher
-    ActivityResultLauncher<Uri> cameraLauncher =
-            registerForActivityResult(new ActivityResultContracts.TakePicture(), success -> {
-                if (success && cameraImageUri != null) {
-                    selectedImageUri = cameraImageUri;
-                    imgPreview.setImageURI(null);
-                    imgPreview.setImageURI(cameraImageUri);
-                    imageContainer.setVisibility(View.VISIBLE);
-                    Toast.makeText(this, "Photo taken!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Camera cancelled", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-    // Camera permission launcher
-    ActivityResultLauncher<String> permissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
-                if (granted) {
-                    openCamera();
-                } else {
-                    Toast.makeText(this, "Camera permission denied",
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
+    ActivityResultLauncher<Uri> cameraLauncher;
+    ActivityResultLauncher<String> galleryLauncher;
+    ActivityResultLauncher<String> permissionLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_lost);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Report Lost Item");
+        }
 
         etItemName = findViewById(R.id.etItemName);
         etLocation = findViewById(R.id.etLocation);
@@ -91,52 +57,104 @@ public class ReportLostActivity extends AppCompatActivity {
         etDescription = findViewById(R.id.etDescription);
         etContact = findViewById(R.id.etContact);
         spinnerCategory = findViewById(R.id.spinnerCategory);
-        btnSubmitLost = findViewById(R.id.btnSubmitLost);
-        btnAddImage = findViewById(R.id.btnAddImage);
-        btnCancelImage = findViewById(R.id.btnCancelImage);
         imgPreview = findViewById(R.id.imgPreview);
-        imageContainer = findViewById(R.id.imageContainer);
+        btnAddPhoto = findViewById(R.id.btnAddPhoto);
+        btnCancelPhoto = findViewById(R.id.btnCancelPhoto);
+        btnSubmitLost = findViewById(R.id.btnSubmitLost);
 
-        // Back button
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Report Lost Item");
-        }
-
-        // Spinner with black text
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, categories) {
+        // Setup Spinner
+        String[] categories = {"Electronics", "Clothing", "Books",
+                "Stationery", "ID Card", "Keys", "Bag", "Other"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, categories) {
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView,
+                                ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 ((TextView) view).setTextColor(Color.BLACK);
-                ((TextView) view).setTextSize(16);
                 return view;
             }
             @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(
+                        position, convertView, parent);
                 ((TextView) view).setTextColor(Color.BLACK);
-                ((TextView) view).setTextSize(16);
-                ((TextView) view).setPadding(16, 16, 16, 16);
                 view.setBackgroundColor(Color.WHITE);
                 return view;
             }
         };
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter);
 
-        // Add image button
-        btnAddImage.setOnClickListener(v -> showImagePickerDialog());
+        // Camera launcher
+        cameraLauncher = registerForActivityResult(
+                new ActivityResultContracts.TakePicture(), result -> {
+                    if (result && cameraImageUri != null) {
+                        selectedImageUri = cameraImageUri;
+                        imgPreview.setVisibility(View.VISIBLE);
+                        imgPreview.setImageURI(selectedImageUri);
+                        btnAddPhoto.setText("Change Photo");
+                        btnCancelPhoto.setVisibility(View.VISIBLE);
+                    }
+                });
 
-        // Cancel image button
-        btnCancelImage.setOnClickListener(v -> {
-            selectedImageUri = null;
-            imgPreview.setImageURI(null);
-            imageContainer.setVisibility(View.GONE);
-            Toast.makeText(this, "Image removed", Toast.LENGTH_SHORT).show();
+        // Gallery launcher
+        galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.GetContent(), uri -> {
+                    if (uri != null) {
+                        selectedImageUri = uri;
+                        imgPreview.setVisibility(View.VISIBLE);
+                        imgPreview.setImageURI(selectedImageUri);
+                        btnAddPhoto.setText("Change Photo");
+                        btnCancelPhoto.setVisibility(View.VISIBLE);
+                    }
+                });
+
+        // Permission launcher
+        permissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(), granted -> {
+                    if (granted) {
+                        openCamera();
+                    } else {
+                        Toast.makeText(this, "Camera permission denied",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        // Add photo button
+        btnAddPhoto.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Add Photo")
+                    .setItems(new String[]{"Take Photo", "Choose from Gallery"},
+                            (dialog, which) -> {
+                                if (which == 0) {
+                                    if (ContextCompat.checkSelfPermission(this,
+                                            Manifest.permission.CAMERA) ==
+                                            PackageManager.PERMISSION_GRANTED) {
+                                        openCamera();
+                                    } else {
+                                        permissionLauncher.launch(
+                                                Manifest.permission.CAMERA);
+                                    }
+                                } else {
+                                    galleryLauncher.launch("image/*");
+                                }
+                            })
+                    .show();
         });
 
+        // Cancel photo button
+        btnCancelPhoto.setOnClickListener(v -> {
+            selectedImageUri = null;
+            imgPreview.setVisibility(View.GONE);
+            imgPreview.setImageURI(null);
+            btnAddPhoto.setText("Add Photo");
+            btnCancelPhoto.setVisibility(View.GONE);
+        });
+
+        // Submit button
         btnSubmitLost.setOnClickListener(v -> {
             String itemName = etItemName.getText().toString().trim();
             String location = etLocation.getText().toString().trim();
@@ -144,6 +162,14 @@ public class ReportLostActivity extends AppCompatActivity {
             String description = etDescription.getText().toString().trim();
             String contact = etContact.getText().toString().trim();
             String category = spinnerCategory.getSelectedItem().toString();
+
+            if (itemName.isEmpty() || location.isEmpty() ||
+                    contact.isEmpty()) {
+                Toast.makeText(this, "Please fill in all required fields",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String imageUri = "";
             if (selectedImageUri != null) {
                 try {
@@ -156,47 +182,20 @@ public class ReportLostActivity extends AppCompatActivity {
                 }
             }
 
-            if (itemName.isEmpty() || location.isEmpty() || contact.isEmpty()) {
-                Toast.makeText(this, "Please fill in all required fields",
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }
-
             // Save to SQLite
             DatabaseHelper db = new DatabaseHelper(this);
             db.insertItem("Lost", itemName, category, location,
                     date, description, contact, imageUri);
 
             // Save to Firebase
-            FirebaseHelper.getInstance().saveItem(this, "Lost", itemName, category,
-                    location, date, description, contact, selectedImageUri);
+            FirebaseHelper.getInstance().saveItem(this, "Lost", itemName,
+                    category, location, date, description, contact,
+                    selectedImageUri);
 
             Toast.makeText(this, "Lost item reported successfully!",
                     Toast.LENGTH_SHORT).show();
             finish();
         });
-
-    }
-
-    private void showImagePickerDialog() {
-        String[] options = {"Take a Photo", "Choose from Gallery", "Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add Photo");
-        builder.setItems(options, (dialog, which) -> {
-            if (which == 0) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    openCamera();
-                } else {
-                    permissionLauncher.launch(Manifest.permission.CAMERA);
-                }
-            } else if (which == 1) {
-                galleryLauncher.launch("image/*");
-            } else {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
     }
 
     private void openCamera() {
@@ -206,7 +205,7 @@ public class ReportLostActivity extends AppCompatActivity {
                     getPackageName() + ".fileprovider", photoFile);
             cameraLauncher.launch(cameraImageUri);
         } catch (IOException e) {
-            Toast.makeText(this, "Error opening camera: " + e.getMessage(),
+            Toast.makeText(this, "Error opening camera",
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -215,7 +214,8 @@ public class ReportLostActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
                 Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = getExternalFilesDir(
+                Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
 

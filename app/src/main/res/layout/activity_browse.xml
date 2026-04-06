@@ -5,80 +5,105 @@
     android:orientation="vertical"
     android:background="#F5F5F5">
 
-
-    <!-- Search bar wrapper -->
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="56dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:background="#F5F5F5">
+        android:background="#6C3DE8"
+        android:padding="24dp"
+        android:paddingBottom="16dp"
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CAMPUS ITEMS"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp"
+            android:letterSpacing="0.1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Browse Items"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Search Bar -->
         <SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#FFFFFF"
             android:queryHint="Search items..."
-            android:iconifiedByDefault="false"
-            android:background="#ffffff"/>
+            android:layout_marginBottom="12dp"/>
 
+        <!-- Filter Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <Button
+                android:id="@+id/btnAll"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="All"
+                android:textSize="13sp"
+                android:textColor="#6C3DE8"
+                android:background="#FFFFFF"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/btnLost"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="Lost"
+                android:textSize="13sp"
+                android:textColor="#FFFFFF"
+                android:background="#33FFFFFF"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/btnFound"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="Found"
+                android:textSize="13sp"
+                android:textColor="#FFFFFF"
+                android:background="#33FFFFFF"
+                android:layout_marginStart="4dp"/>
+
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- Filter buttons -->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <Button
-            android:id="@+id/btnAll"
-            android:text="All"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="#6C3DE8"/>
-
-        <Button
-            android:id="@+id/btnLost"
-            android:text="Lost"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="#E53935"/>
-
-        <Button
-            android:id="@+id/btnFound"
-            android:text="Found"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#43A047"/>
-
-    </LinearLayout>
-
-    <!-- Empty state message -->
+    <!-- Empty State -->
     <TextView
         android:id="@+id/tvEmpty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No items found"
+        android:text="No items reported yet"
+        android:textColor="#9E9E9E"
         android:textSize="16sp"
-        android:textColor="#999999"
         android:gravity="center"
-        android:padding="32dp"
+        android:padding="40dp"
         android:visibility="gone"/>
 
-    <!-- Items list -->
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false"/>
 
 </LinearLayout>

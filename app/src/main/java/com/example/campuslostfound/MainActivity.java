@@ -3,34 +3,38 @@ package com.example.campuslostfound;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.cardview.widget.CardView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout cardReportLost, cardReportFound, cardBrowse;
     TextView tvLostCount, tvFoundCount;
+    CardView cardReportLost, cardReportFound, cardBrowse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Hide action bar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-
+        tvLostCount = findViewById(R.id.tvLostCount);
+        tvFoundCount = findViewById(R.id.tvFoundCount);
         cardReportLost = findViewById(R.id.cardReportLost);
         cardReportFound = findViewById(R.id.cardReportFound);
         cardBrowse = findViewById(R.id.cardBrowse);
-        tvLostCount = findViewById(R.id.tvLostCount);
-        tvFoundCount = findViewById(R.id.tvFoundCount);
 
-        // Load counts from Firebase
+        cardReportLost.setOnClickListener(v ->
+                startActivity(new Intent(this, ReportLostActivity.class)));
+
+        cardReportFound.setOnClickListener(v ->
+                startActivity(new Intent(this, ReportFoundActivity.class)));
+
+        cardBrowse.setOnClickListener(v ->
+                startActivity(new Intent(this, BrowseActivity.class)));
+
+        // Load live counts from Firebase
         FirebaseHelper.getInstance().getReference()
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -47,19 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(DatabaseError error) {}
                 });
-
-        cardReportLost.setOnClickListener(v -> {
-            startActivity(new Intent(this, ReportLostActivity.class));
-        });
-
-        cardReportFound.setOnClickListener(v -> {
-            startActivity(new Intent(this, ReportFoundActivity.class));
-        });
-
-        cardBrowse.setOnClickListener(v -> {
-            startActivity(new Intent(this, BrowseActivity.class));
-        });
     }
 }
