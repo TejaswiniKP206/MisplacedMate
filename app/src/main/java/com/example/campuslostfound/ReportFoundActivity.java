@@ -71,7 +71,8 @@ public class ReportFoundActivity extends AppCompatActivity {
             public View getView(int position, View convertView,
                                 ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
-                ((TextView) view).setTextColor(Color.BLACK);
+                ((TextView) view).setTextColor(Color.WHITE);
+                view.setBackgroundColor(Color.parseColor("#16213E"));
                 return view;
             }
             @Override
@@ -79,8 +80,8 @@ public class ReportFoundActivity extends AppCompatActivity {
                                         ViewGroup parent) {
                 View view = super.getDropDownView(
                         position, convertView, parent);
-                ((TextView) view).setTextColor(Color.BLACK);
-                view.setBackgroundColor(Color.WHITE);
+                ((TextView) view).setTextColor(Color.WHITE);
+                view.setBackgroundColor(Color.parseColor("#16213E"));
                 return view;
             }
         };

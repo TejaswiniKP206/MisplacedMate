@@ -22,7 +22,7 @@ public class BrowseActivity extends AppCompatActivity {
     ItemAdapter adapter;
     List<ItemModel> allItems;
     DatabaseHelper db;
-    SearchView searchView;
+    android.widget.EditText etSearch;
     Button btnAll, btnLost, btnFound;
     TextView tvEmpty;
     DatabaseReference firebaseRef;
@@ -34,7 +34,7 @@ public class BrowseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_browse);
 
         recyclerView = findViewById(R.id.recyclerView);
-        searchView = findViewById(R.id.searchView);
+        etSearch = findViewById(R.id.etSearch);
         btnAll = findViewById(R.id.btnAll);
         btnLost = findViewById(R.id.btnLost);
         btnFound = findViewById(R.id.btnFound);
@@ -75,7 +75,7 @@ public class BrowseActivity extends AppCompatActivity {
                     item.setImageBase64(snapshot.child("imageBase64").getValue(String.class));
                     allItems.add(item);
                 }
-                filterAndSearch(searchView.getQuery().toString());
+                filterAndSearch(etSearch.getText().toString());
                 checkEmpty(allItems);
             }
 
@@ -95,36 +95,37 @@ public class BrowseActivity extends AppCompatActivity {
             btnAll.setSelected(true);
             btnLost.setSelected(false);
             btnFound.setSelected(false);
-            filterAndSearch(searchView.getQuery().toString());
+            filterAndSearch(etSearch.getText().toString());
         });
 
         btnLost.setOnClickListener(v -> {
             btnAll.setSelected(false);
             btnLost.setSelected(true);
             btnFound.setSelected(false);
-            filterAndSearch(searchView.getQuery().toString());
+            filterAndSearch(etSearch.getText().toString());
         });
 
         btnFound.setOnClickListener(v -> {
             btnAll.setSelected(false);
             btnLost.setSelected(false);
             btnFound.setSelected(true);
-            filterAndSearch(searchView.getQuery().toString());
+            filterAndSearch(etSearch.getText().toString());
         });
 
         // Search functionality
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        etSearch.addTextChangedListener(new android.text.TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                filterAndSearch(query);
-                return true;
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                filterAndSearch(s.toString());
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                filterAndSearch(newText);
-                return true;
-            }
+            public void afterTextChanged(android.text.Editable s) {}
         });
 
         // Search bar text color fix
@@ -132,7 +133,12 @@ public class BrowseActivity extends AppCompatActivity {
             int searchSrcTextId = getResources().getIdentifier(
                     "search_src_text", "id", "android");
             android.widget.EditText searchEditText =
-                    searchView.findViewById(searchSrcTextId);
+                    etSearch = findViewById(R.id.etSearch);
+                    etSearch.post(() -> {
+                        etSearch.setTextColor(0xFFFFFFFF);
+                        etSearch.setHintTextColor(0xFF888888);
+                        etSearch.invalidate();
+                    });
             if (searchEditText != null) {
                 searchEditText.setTextColor(android.graphics.Color.BLACK);
                 searchEditText.setHintTextColor(android.graphics.Color.GRAY);

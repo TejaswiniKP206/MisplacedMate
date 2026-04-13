@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="#16213E">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,21 +50,22 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="2dp">
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#16213E">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp"
-                android:background="#FFFFFF">
+                android:background="#16213E">
 
                 <!-- Item Name -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ITEM NAME"
-                    android:textColor="#9E9E9E"
+                    android:textColor="#888888"
                     android:textSize="11sp"
                     android:layout_marginBottom="6dp"/>
 
@@ -73,10 +74,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="e.g. Black Umbrella"
-                    android:textColor="#000000"
+                    android:textColor="#FFFFFF"
                     android:textColorHint="#BDBDBD"
                     android:textCursorDrawable="@null"
-                    android:background="#F5F5F5"
+                    android:background="#1A1A2E"
                     android:padding="12dp"
                     android:layout_marginBottom="16dp"/>
 
@@ -85,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="CATEGORY"
-                    android:textColor="#9E9E9E"
+                    android:textColor="#888888"
                     android:textSize="11sp"
                     android:layout_marginBottom="6dp"/>
 
@@ -93,8 +94,8 @@
                     android:id="@+id/spinnerCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#F5F5F5"
-                    android:padding="12dp"
+                    android:background="@drawable/spinner_bg"
+                    android:popupBackground="#16213E"
                     android:layout_marginBottom="16dp"/>
 
                 <!-- Location -->
@@ -102,7 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="LOCATION"
-                    android:textColor="#9E9E9E"
+                    android:textColor="#888888"
                     android:textSize="11sp"
                     android:layout_marginBottom="6dp"/>
 
@@ -111,10 +112,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Where did you find it?"
-                    android:textColor="#000000"
+                    android:textColor="#FFFFFF"
                     android:textColorHint="#BDBDBD"
                     android:textCursorDrawable="@null"
-                    android:background="#F5F5F5"
+                    android:background="#1A1A2E"
                     android:padding="12dp"
                     android:layout_marginBottom="16dp"/>
 
@@ -123,7 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="DATE"
-                    android:textColor="#9E9E9E"
+                    android:textColor="#888888"
                     android:textSize="11sp"
                     android:layout_marginBottom="6dp"/>
 
@@ -132,10 +133,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="DD/MM/YYYY"
-                    android:textColor="#000000"
+                    android:textColor="#FFFFFF"
                     android:textColorHint="#BDBDBD"
                     android:textCursorDrawable="@null"
-                    android:background="#F5F5F5"
+                    android:background="#1A1A2E"
                     android:padding="12dp"
                     android:inputType="date"
                     android:layout_marginBottom="16dp"/>
@@ -145,7 +146,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="DESCRIPTION"
-                    android:textColor="#9E9E9E"
+                    android:textColor="#888888"
                     android:textSize="11sp"
                     android:layout_marginBottom="6dp"/>
 
@@ -154,10 +155,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Describe the item in detail..."
-                    android:textColor="#000000"
+                    android:textColor="#FFFFFF"
                     android:textColorHint="#BDBDBD"
                     android:textCursorDrawable="@null"
-                    android:background="#F5F5F5"
+                    android:background="#1A1A2E"
                     android:padding="12dp"
                     android:minLines="3"
                     android:gravity="top"
@@ -169,7 +170,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="CONTACT NUMBER"
-                    android:textColor="#9E9E9E"
+                    android:textColor="#888888"
                     android:textSize="11sp"
                     android:layout_marginBottom="6dp"/>
 
@@ -178,10 +179,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Your phone number"
-                    android:textColor="#000000"
+                    android:textColor="#FFFFFF"
                     android:textColorHint="#BDBDBD"
                     android:textCursorDrawable="@null"
-                    android:background="#F5F5F5"
+                    android:background="#1A1A2E"
                     android:padding="12dp"
                     android:inputType="phone"
                     android:layout_marginBottom="16dp"/>
@@ -191,7 +192,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="PHOTO"
-                    android:textColor="#9E9E9E"
+                    android:textColor="#888888"
                     android:textSize="11sp"
                     android:layout_marginBottom="6dp"/>
 
@@ -217,8 +218,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Add Photo"
-                        android:textColor="#43A047"
-                        android:background="#E8F5E9"
+                        android:textColor="#E53935"
+                        android:background="#1A1A2E"
                         android:padding="12dp"
                         android:layout_marginEnd="6dp"/>
 
@@ -228,8 +229,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Remove Photo"
-                        android:textColor="#9E9E9E"
-                        android:background="#F5F5F5"
+                        android:textColor="#555555"
+                        android:background="#1A1A2E"
                         android:padding="12dp"
                         android:layout_marginStart="6dp"
                         android:visibility="gone"/>
